@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 # --- Part 1: Pandas ---
 
@@ -95,3 +96,42 @@ arr2 = np.array([[1, 2, 3],
 # print("Standard Deviation:", np.std(arr_stan))
 
 # --- Part 1: Matplotlib ---
+
+# Matplot Q1
+x = [0, 1, 2, 3, 4, 5]
+y = [0, 1, 4, 9, 16, 25]
+
+plt.plot(x, y)
+plt.title("Squares")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.show()
+
+# Matplot Q2
+subjects = ["Math", "Science", "English", "History"]
+scores   = [88, 92, 75, 83]
+# plt.bar(subjects, scores)
+# plt.title("Scores by Subjects")
+# plt.xlabel("Subjects")
+# plt.ylabel("Scores")
+# plt.show()
+
+# Matplot Q3
+# x1, y1 = [1, 2, 3, 4, 5], [2, 4, 5, 4, 5]
+# plt.scatter(x1, y1, color='red')
+# x2, y2 = [1, 2, 3, 4, 5], [5, 4, 3, 2, 1]
+# plt.xlabel("X Points")
+# plt.ylabel("Y Points")
+# plt.scatter(x2, y2, color='blue')
+# plt.legend(['First Points', 'Second Points'])
+# plt.show()
+
+# Matplot Q4
+plt.subplot(1, 2, 1)
+plt.plot(x, y)
+plt.title("Basic X-Y Scatterplot")
+plt.subplot(1, 2, 2)
+plt.bar(subjects, scores)
+plt.title("Scores by Subjects")
+plt.tight_layout()
+plt.show()
