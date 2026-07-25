@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import statistics as stats
 
 # --- Part 1: Pandas ---
 
@@ -98,14 +99,14 @@ arr2 = np.array([[1, 2, 3],
 # --- Part 1: Matplotlib ---
 
 # Matplot Q1
-x = [0, 1, 2, 3, 4, 5]
-y = [0, 1, 4, 9, 16, 25]
+# x = [0, 1, 2, 3, 4, 5]
+# y = [0, 1, 4, 9, 16, 25]
 
-plt.plot(x, y)
-plt.title("Squares")
-plt.xlabel("x")
-plt.ylabel("y")
-plt.show()
+# plt.plot(x, y)
+# plt.title("Squares")
+# plt.xlabel("x")
+# plt.ylabel("y")
+# plt.show()
 
 # Matplot Q2
 subjects = ["Math", "Science", "English", "History"]
@@ -127,11 +128,70 @@ scores   = [88, 92, 75, 83]
 # plt.show()
 
 # Matplot Q4
-plt.subplot(1, 2, 1)
-plt.plot(x, y)
-plt.title("Basic X-Y Scatterplot")
-plt.subplot(1, 2, 2)
-plt.bar(subjects, scores)
-plt.title("Scores by Subjects")
-plt.tight_layout()
-plt.show()
+# plt.subplot(1, 2, 1)
+# plt.plot(x, y)
+# plt.title("Basic X-Y Scatterplot")
+# plt.subplot(1, 2, 2)
+# plt.bar(subjects, scores)
+# plt.title("Scores by Subjects")
+# plt.tight_layout()
+# plt.show()
+
+# --- Part 1: Descriptive Statistics ---
+
+# DS Q1
+# data = [12, 15, 14, 10, 18, 22, 13, 16, 14, 15]
+# print("Mean: ", np.mean(data))
+# print("Median: ", np.median(data))
+# print("Variance: ", np.var(data) )
+# print("Standard Deviation: ", np.std(data))
+# print("===========================================")
+
+# DS Q2
+# arr_rand = np.random.normal(65, 10, 500)
+# plt.hist(arr_rand, bins=20, color="red", edgecolor="black")
+# plt.title("Distribution of Scores")
+# plt.xlabel("Numbers")
+# plt.ylabel("Frequencies of Numbers")
+# plt.show()
+
+# DS Q3
+# group_a = [55, 60, 63, 70, 68, 62, 58, 65]
+# group_b = [75, 80, 78, 90, 85, 79, 82, 88]
+# plt.boxplot([group_a, group_b], tick_labels=["Group A", "Group B"])
+# plt.title("Score Comparison")
+# plt.ylabel("Value")
+# plt.show()
+
+# DS Q4
+# normal_data = np.random.normal(50, 5, 200)
+# skewed_data = np.random.exponential(10, 200)
+# plt.boxplot([normal_data, skewed_data], tick_labels=["Normal", "Exponential"])
+# plt.title("Distribution Comparsion")
+# plt.ylabel("Value")
+# plt.show()
+
+"""
+From looking at the boxplots, exponential seems to be more skewed, top whisker much longer then the bottom whisker
+and the median line is not centered. The descriptive statistic for the normal that we can use is mean since there doesn't 
+seem to be any outliers while for exponential we will use the median due to its skewness
+"""
+
+# DS Q5
+data1 = [10, 12, 12, 16, 18]
+data2 = [10, 12, 12, 16, 150]
+
+print("Mean Data 1: ", np.mean(data1) )
+print("Median Data 1: ", np.median(data1) )
+print("Mode Data 1: ", stats.mode(data1))
+
+print("Mean Data 2: ", np.mean(data2))
+print("Median Data 2: ", np.median(data2) )
+print("Mode Data 2: ", stats.mode(data2) )
+
+"""
+The mean is very different to the outlier that is 150 for data2, skewing the data which causes
+a big change in the mean. The median is the same for both though.
+"""
+
+# --- Part 1: Hypothesis Testing---
