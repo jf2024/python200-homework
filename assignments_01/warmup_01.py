@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import statistics as stats
+from scipy import stats
 
 # --- Part 1: Pandas ---
 
@@ -178,16 +179,16 @@ seem to be any outliers while for exponential we will use the median due to its 
 """
 
 # DS Q5
-data1 = [10, 12, 12, 16, 18]
-data2 = [10, 12, 12, 16, 150]
+# data1 = [10, 12, 12, 16, 18]
+# data2 = [10, 12, 12, 16, 150]
 
-print("Mean Data 1: ", np.mean(data1) )
-print("Median Data 1: ", np.median(data1) )
-print("Mode Data 1: ", stats.mode(data1))
+# print("Mean Data 1: ", np.mean(data1) )
+# print("Median Data 1: ", np.median(data1) )
+# print("Mode Data 1: ", stats.mode(data1))
 
-print("Mean Data 2: ", np.mean(data2))
-print("Median Data 2: ", np.median(data2) )
-print("Mode Data 2: ", stats.mode(data2) )
+# print("Mean Data 2: ", np.mean(data2))
+# print("Median Data 2: ", np.median(data2) )
+# print("Mode Data 2: ", stats.mode(data2) )
 
 """
 The mean is very different to the outlier that is 150 for data2, skewing the data which causes
@@ -195,3 +196,52 @@ a big change in the mean. The median is the same for both though.
 """
 
 # --- Part 1: Hypothesis Testing---
+
+# HT Q1
+group_a = [72, 68, 75, 70, 69, 73, 71, 74]
+group_b = [80, 85, 78, 83, 82, 86, 79, 84]
+
+t_stat, p_val = stats.ttest_ind(group_a, group_b)
+print("t-statistic:", t_stat)
+print("p-value:", p_val)
+
+# HT Q2
+if p_val < 0.05:
+    print("The difference is statistically significant.")
+else:
+    print("No statistically significant difference detected.")
+
+print("===========================================")
+
+# HT Q3
+before = [60, 65, 70, 58, 62, 67, 63, 66]
+after  = [68, 70, 76, 65, 69, 72, 70, 71]
+t_stat, p_val = stats.ttest_ind(before, after)
+print("t-statistic:", t_stat)
+print("p-value:", p_val)
+print("===========================================")
+
+# HT Q4
+scores = [72, 68, 75, 70, 69, 74, 71, 73]
+t_stat, p_val = stats.ttest_1samp(scores, 70)
+print("t-statistic:", t_stat)
+print("p-value:", p_val)
+print("There doesn't appear to be significant difference between the scores and the benchmark of 70.")
+print("===========================================")
+
+# HT Q5
+t_stat, p_val = stats.ttest_ind(group_a, group_b, alternative="less")
+print("p-value:", p_val)
+print("===========================================")
+
+# HT Q6
+print(
+"""
+The difference between the groups is unlikely to be due to random chance because our p-value 
+(0.0000015471) is less than 0.05. 
+Therefore, we reject the null hypothesis that 
+there is no difference between Group A and Group B. 
+This suggests that there is a statistically significant difference between the two groups.
+""")
+
+# --- Part 1: Correlation---
