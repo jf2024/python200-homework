@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import statistics as stats
 from scipy import stats
+from scipy.stats import pearsonr
+import seaborn as sns
 
 # --- Part 1: Pandas ---
 
@@ -197,51 +199,98 @@ a big change in the mean. The median is the same for both though.
 
 # --- Part 1: Hypothesis Testing---
 
-# HT Q1
-group_a = [72, 68, 75, 70, 69, 73, 71, 74]
-group_b = [80, 85, 78, 83, 82, 86, 79, 84]
+# # HT Q1
+# group_a = [72, 68, 75, 70, 69, 73, 71, 74]
+# group_b = [80, 85, 78, 83, 82, 86, 79, 84]
 
-t_stat, p_val = stats.ttest_ind(group_a, group_b)
-print("t-statistic:", t_stat)
-print("p-value:", p_val)
+# t_stat, p_val = stats.ttest_ind(group_a, group_b)
+# print("t-statistic:", t_stat)
+# print("p-value:", p_val)
 
-# HT Q2
-if p_val < 0.05:
-    print("The difference is statistically significant.")
-else:
-    print("No statistically significant difference detected.")
+# # HT Q2
+# if p_val < 0.05:
+#     print("The difference is statistically significant.")
+# else:
+#     print("No statistically significant difference detected.")
 
-print("===========================================")
+# print("===========================================")
 
-# HT Q3
-before = [60, 65, 70, 58, 62, 67, 63, 66]
-after  = [68, 70, 76, 65, 69, 72, 70, 71]
-t_stat, p_val = stats.ttest_ind(before, after)
-print("t-statistic:", t_stat)
-print("p-value:", p_val)
-print("===========================================")
+# # HT Q3
+# before = [60, 65, 70, 58, 62, 67, 63, 66]
+# after  = [68, 70, 76, 65, 69, 72, 70, 71]
+# t_stat, p_val = stats.ttest_ind(before, after)
+# print("t-statistic:", t_stat)
+# print("p-value:", p_val)
+# print("===========================================")
 
-# HT Q4
-scores = [72, 68, 75, 70, 69, 74, 71, 73]
-t_stat, p_val = stats.ttest_1samp(scores, 70)
-print("t-statistic:", t_stat)
-print("p-value:", p_val)
-print("There doesn't appear to be significant difference between the scores and the benchmark of 70.")
-print("===========================================")
+# # HT Q4
+# scores = [72, 68, 75, 70, 69, 74, 71, 73]
+# t_stat, p_val = stats.ttest_1samp(scores, 70)
+# print("t-statistic:", t_stat)
+# print("p-value:", p_val)
+# print("There doesn't appear to be significant difference between the scores and the benchmark of 70.")
+# print("===========================================")
 
-# HT Q5
-t_stat, p_val = stats.ttest_ind(group_a, group_b, alternative="less")
-print("p-value:", p_val)
-print("===========================================")
+# # HT Q5
+# t_stat, p_val = stats.ttest_ind(group_a, group_b, alternative="less")
+# print("p-value:", p_val)
+# print("===========================================")
 
-# HT Q6
-print(
-"""
-The difference between the groups is unlikely to be due to random chance because our p-value 
-(0.0000015471) is less than 0.05. 
-Therefore, we reject the null hypothesis that 
-there is no difference between Group A and Group B. 
-This suggests that there is a statistically significant difference between the two groups.
-""")
+# # HT Q6
+# print(
+# """
+# The difference between the groups is unlikely to be due to random chance because our p-value 
+# (0.0000015471) is less than 0.05. 
+# Therefore, we reject the null hypothesis that 
+# there is no difference between Group A and Group B. 
+# This suggests that there is a statistically significant difference between the two groups.
+# """)
 
 # --- Part 1: Correlation---
+
+# C Q1 
+# x = [1, 2, 3, 4, 5]
+# y = [2, 4, 6, 8, 10]
+# corr_matrix = np.corrcoef(x, y)
+# print(corr_matrix)
+# print(corr_matrix[0, 1])
+# print("===========================================")
+"""
+i expected the correlation to be 1 since the two groups seem to be moving up 
+(the higher the x, y also increases), but doesnt show causation
+"""
+
+# C Q2
+# x = [1,  2,  3,  4,  5,  6,  7,  8,  9, 10]
+# y = [10, 9,  7,  8,  6,  5,  3,  4,  2,  1]
+# r, p = pearsonr(x, y)
+# print("Correlation:", round(r, 2))
+# print("p-value:", round(p, 4))
+# print("===========================================")
+
+# CQ3
+# people = {
+#     "height": [160, 165, 170, 175, 180],
+#     "weight": [55,  60,  65,  72,  80],
+#     "age":    [25,  30,  22,  35,  28]
+# }
+# df = pd.DataFrame(people)
+# print(df.corr())
+# print("===========================================")
+
+# CQ4
+# x = [10, 20, 30, 40, 50]
+# y = [90, 75, 60, 45, 30]
+# plt.scatter(x, y, color="green")
+# plt.title("Negative Correlation")
+# plt.xlabel("X-axis")
+# plt.ylabel("Y-axis")
+# plt.show()
+
+# CQ5
+# corr = df.corr()
+# sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f")
+# plt.title("Correlation Heatmap")
+# plt.show()
+
+
