@@ -37,8 +37,7 @@ if __name__ == "__main__":
 """
 Note on running this in the command line:
 1) prefect server start
-2) prefect config set PREFECT_API_URL=http://127.0.0.1:4200/api (in another window)
-3) python hello_prefect.py
+2) python hello_prefect.py
 """
 
 # ----COMMENT BLOCK----
