@@ -182,3 +182,5 @@ cython_debug/
 
 # IIS VIsual Stuudio directory
 .iis/
+
+data/
