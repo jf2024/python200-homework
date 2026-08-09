@@ -22,32 +22,47 @@ def summarize_data(series):
     return series_info
 
 @flow
-def data_pipeline(arr):
+def data_pipeline():
+    arr = np.array([
+        12.0, 15.0, np.nan, 14.0, 10.0, np.nan,
+        18.0, 14.0, 16.0, 22.0, np.nan, 13.0
+    ])
+
     values = create_series(arr)
     cleaned = clean_data(values)
     summary = summarize_data(cleaned)
     return summary
 
 
-if __name__ == "__main__":
-    arr = np.array([12.0, 15.0, np.nan, 14.0, 10.0, np.nan, 18.0, 14.0, 16.0, 22.0, np.nan, 13.0])
-    print(data_pipeline(arr))
-    #{'mean': 14.88888888888889, 'median': 14.0, 'std': 3.314763086705844, 'mode': 14.0}
+if __name__ == '__main__':
+    print(data_pipeline())
+
 
 """
 Note on running this in the command line:
-1) prefect server start
-2) python hello_prefect.py
+
+1. prefect server start
+2. python hello_prefect.py
 """
 
 # ----COMMENT BLOCK----
 """
-Q1) For something small like this, the extra information and potential logging if we were to do that
-might make the program load or run slower and isn't fully needed in this case with the extra dependencies 
+Q1) Why might Prefect be overkill for this example?
 
-Q2) I think a realist scenario would be in the sports industry. I can imagine a team would have a lot of different
-places/sources to pull data from so that can be its own task (with more subtasks with the different sources and then
-combining the data into one table for example). Then with each of those sources we need to do some cleaning, 
-transformations, standardizations, etc... and then we can load it into a database to do some queries and analysis and 
-plotting. 
+For a small program like this, Prefect can be overkill because there are
+only a few simple tasks and no complicated workflow. Prefect adds extra
+dependencies, logging, task management, and overhead that are not really
+needed for such a small program. It would be simpler to run these functions
+directly with normal Python.
+
+
+Q2) When would Prefect be useful?
+
+Prefect would be useful for a larger data pipeline where there are many
+different tasks and data sources. For example, in the sports industry, a
+team could have different tasks for collecting data from multiple sources,
+cleaning and transforming the data, combining it into one dataset, loading
+it into a database, and then creating reports or visualizations. Prefect
+would be useful for organizing those tasks, tracking their progress, and
+handling failures or retries.
 """

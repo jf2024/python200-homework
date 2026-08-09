@@ -114,7 +114,7 @@ def correlation(dataframe):
 
     explanatory_variables = [
         col for col in numeric_columns
-        if col != 'Happiness score'
+        if col not in ['Happiness score', 'Ranking']
     ]
 
     alpha = 0.05
@@ -123,6 +123,7 @@ def correlation(dataframe):
 
     logger.info(f'number of correlation tests: {number_of_tests}')
     logger.info(f'adjusted alpha: {adjusted_alpha}')
+    correlation_results = {}
 
     for variable in explanatory_variables:
 
@@ -135,14 +136,21 @@ def correlation(dataframe):
             clean_data['Happiness score']
         )
 
+        correlation_results[variable] = {
+            'correlation': correlation,
+            'p_value': p_value
+        }
+
         logger.info(
             f'{variable}: r={correlation:.4f}, p={p_value:.4f}, '
             f'significant at 0.05={p_value < alpha}, '
             f'significant after Bonferroni={p_value < adjusted_alpha}'
         )
 
+    return correlation_results
+
 @task
-def summary(dataframe):
+def summary(dataframe, corr_results):
     logger = get_run_logger()
 
     num_countries = dataframe['Country'].unique().size
@@ -157,7 +165,36 @@ def summary(dataframe):
 
     logger.info("We do not have sufficient evidence to conclude that there was a statistically significant difference in happiness scores between 2019 and 2020.")
 
-    logger.info("The variable that showed the most correlation with happiness scores (not including itself and ranking), was Social Support")
+    adjusted_alpha = 0.05 / len(corr_results)
+
+    significant_correlations = {
+        variable: result
+        for variable, result in corr_results.items()
+        if result['p_value'] < adjusted_alpha
+    }
+
+    if significant_correlations:
+        strongest_variable = max(
+            significant_correlations,
+            key=lambda variable: abs(
+                significant_correlations[variable]['correlation']
+            )
+        )
+
+        strongest_correlation = significant_correlations[
+            strongest_variable
+        ]['correlation']
+
+        logger.info(
+            f'The variable most strongly correlated with happiness score '
+            f'after Bonferroni correction was {strongest_variable} '
+            f'(r={strongest_correlation:.4f})'
+        )
+    else:
+        logger.info(
+            'No variables had a statistically significant correlation '
+            'with happiness score after Bonferroni correction.'
+        )
 
 
 @flow
@@ -166,8 +203,8 @@ def happiness_pipeline():
     descriptive_stats(df)
     visuals(df)
     hypo_test(df)
-    correlation(df)
-    summary(df)
+    correlation_results = correlation(df)
+    summary(df, correlation_results)
 
 
 if __name__ == "__main__":

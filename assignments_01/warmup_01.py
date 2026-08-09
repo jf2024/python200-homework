@@ -218,7 +218,7 @@ print("===========================================")
 # # HT Q3
 before = [60, 65, 70, 58, 62, 67, 63, 66]
 after  = [68, 70, 76, 65, 69, 72, 70, 71]
-t_stat, p_val = stats.ttest_ind(before, after)
+t_stat, p_val = stats.ttest_rel(before, after)
 print("t-statistic:", t_stat)
 print("p-value:", p_val)
 print("===========================================")
@@ -239,12 +239,12 @@ print("===========================================")
 # # HT Q6
 print(
 """
-The difference between the groups is unlikely to be due to random chance because our p-value 
-(0.0000015471) is less than 0.05. 
-Therefore, we reject the null hypothesis that 
-there is no difference between Group A and Group B. 
-This suggests that there is a statistically significant difference between the two groups.
-""")
+Group B had higher scores than Group A. The p-value is less than 0.05,
+which means the difference between the groups is unlikely to be due to
+random chance. Therefore, we reject the null hypothesis and conclude
+that there is a statistically significant difference between the two groups.
+"""
+)
 
 # --- Part 1: Correlation---
 
