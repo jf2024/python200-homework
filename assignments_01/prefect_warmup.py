@@ -4,7 +4,8 @@ from prefect import task, flow
 
 @task
 def create_series(arr):
-    return pd.Series(arr)
+    values = pd.Series(arr)
+    return values
 
 @task
 def clean_data(series):

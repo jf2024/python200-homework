@@ -315,10 +315,10 @@ def summarize_data(series):
 
     return series_info
 
-def data_pipeline(arr):
+def pipeline_flow(arr):
     values = create_series(arr)
     cleaned = clean_data(values)
     summary = summarize_data(cleaned)
     return summary
 
-print(data_pipeline(arr))
+print(pipeline_flow(arr))
