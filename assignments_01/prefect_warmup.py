@@ -36,7 +36,7 @@ def data_pipeline():
 
 
 if __name__ == '__main__':
-    print(data_pipeline())
+    data_pipeline()
 
 
 """
