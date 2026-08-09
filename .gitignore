@@ -184,3 +184,5 @@ cython_debug/
 .iis/
 
 data/
+
+*.ipynb

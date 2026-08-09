@@ -107,14 +107,14 @@ def hypo_test(dataframe):
     logger.info("T-test result for happiness scores in Latin America/Caribean vs North America/ANZ: t=%.2f, p=%.4f", t_stat, p_val)
     logger.info('Since the p-value is less then 0.05, we reject the null hypothesis. This means that there is evidence to suggeest a statistically significan difference between happiness scores in North America vs Latin America')
 
-
-#task
+@task
 def correlation(dataframe):
     logger = get_run_logger()
     numeric_columns = dataframe.select_dtypes(include='number').columns
 
     explanatory_variables = [
         col for col in numeric_columns
+        if col != 'Happiness score'
     ]
 
     alpha = 0.05
@@ -125,9 +125,14 @@ def correlation(dataframe):
     logger.info(f'adjusted alpha: {adjusted_alpha}')
 
     for variable in explanatory_variables:
+
+        clean_data = dataframe[
+            [variable, 'Happiness score']
+        ].dropna()
+
         correlation, p_value = pearsonr(
-            dataframe[variable],
-            dataframe['Happiness score']
+            clean_data[variable],
+            clean_data['Happiness score']
         )
 
         logger.info(
@@ -144,11 +149,11 @@ def summary(dataframe):
     num_years = dataframe['year'].unique().size
     logger.info(f'Number of countres {num_countries} and there are {num_years} years')
 
-    avg_countries_happy = dataframe.groupby('Country')['Happiness score'].mean()
-    top_3 = avg_countries_happy.sort_values(ascending=False).head(3)
-    bottom_3 = avg_countries_happy.sort_values().head(3)
-    logger.info(f'Top 3 countries by happiness score: {top_3}')
-    logger.info(f'Bottom 3 countries by happiness score: {bottom_3}')
+    avg_regions_happy = dataframe.groupby('Regional indicator')['Happiness score'].mean()
+    top_3 = avg_regions_happy.sort_values(ascending=False).head(3)
+    bottom_3 = avg_regions_happy.sort_values().head(3)
+    logger.info(f'Top 3 regions by happiness score: {top_3}')
+    logger.info(f'Bottom 3 regions by happiness score: {bottom_3}')
 
     logger.info("We do not have sufficient evidence to conclude that there was a statistically significant difference in happiness scores between 2019 and 2020.")
 
