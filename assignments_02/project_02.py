@@ -14,7 +14,7 @@ import seaborn as sns
 data = pd.read_csv('../data/student_performance_math.csv', sep=';')
 print('Shape is:', data.shape)
 print(data.head(5))
-print(data.info())
+print(data.dtypes)
 
 plt.hist(data['G3'], bins=21, color="purple", edgecolor="black")
 plt.title("Distribution of Final Math Grades")
@@ -39,8 +39,9 @@ clean_data['sex'] = clean_data['sex'].map({'F': 0, 'M': 1})
 
 print('Correlation of absences and original data', pearsonr(data['absences'], data['G3'])[0] ) #0 is correlation, 1 is the p-valie
 print('Correlation of absences and cleaned data', pearsonr(clean_data['absences'], clean_data['G3'])[0] )
-# In the original data, students didnt take the exam so having a 0 was misspresenting them, without them we get a clearer
-    # picture that perphaps absences will make a student perform worse which makes sense
+# In the original data, students didnt take the exam so having a 0 was misspresenting them (making the model worse), without them we get a clearer
+    # picture that perphaps absences will make a student perform worse which makes sense. Removing them shows the true association
+    # between the variables 
 
 # Task 3
 numeric_features = ['age', 'Medu', 'Fedu', 'traveltime', 'studytime', 'failures', 'absences', 'freetime', 'goout', 'Walc',
@@ -55,24 +56,25 @@ print(sorted(corr_list, key=lambda tup: tup[1])) #https://stackoverflow.com/ques
 # Strongest positive relationship is Medu, then Fedu, and Studytime 
 # A little shocked that parents education matter more then studytime but its not that big of a margin and shocked that age has a negative affect
 
-sns.boxplot(x='age', y='G3', data=clean_data)
+sns.boxplot(x="failures", y="G3", data=clean_data)
 
-plt.title("Final Math Score by Age")
-plt.xlabel("Age")
+plt.title("Final Math Score by Previous Failures")
+plt.xlabel("Number of Past Class Failures")
 plt.ylabel("Final Math Score (0-20)")
-plt.savefig("outputs/age_vs_g3_boxplot.png")
+plt.savefig("outputs/failures_vs_g3_boxplot.png")
 plt.show()
-# Looks like the younger students (15-16), perform better or the same for the older kids
-    # with the exception of age 20 while age 21 and 22 dont have enough students to rlly show a boxplot
+# Students with more past failures generally have lower final math scores.
+    # interesting outliers for students failing twice
 
-sns.boxplot(x='studytime', y='G3', data=clean_data)
-plt.title("Final Math Score by Study Time")
-plt.xlabel("Study Time")
+sns.scatterplot(x="absences", y="G3", data=clean_data, alpha=0.7)
+
+plt.title("Final Math Score by Absences")
+plt.xlabel("Number of Absences")
 plt.ylabel("Final Math Score (0-20)")
-plt.savefig("outputs/studytime_vs_g3_boxplot.png")
+plt.savefig("outputs/absences_vs_g3_scatterplot.png")
 plt.show()
-# Study time looks pretty even across the board between the final score being at 11-13 on average
-    # though very small increase in score if studying for at least 30 min to 1 hour
+# Students with more absences tend to have lower G3 scores, although there is
+# lots of variation because students with similar absence counts can earn different grades.
 
 # Task 4
 X = clean_data[['failures']] # dont forget to rehspae if just 1 feature
@@ -151,13 +153,28 @@ plt.ylabel("Actual G3 Score")
 plt.savefig("outputs/predicted_vs_actual_g3.png")
 plt.show()
 
-# Size of filtered dataset was 357 students while original data was 395 students
-# Full Feature Model, RMSE of 2.66 so on average, predictions off by 2.66 points while the R2 was 0.26
-# Largest impact that I saw was schoolsup with -2.263 which means if additional support and holding the other
-    # variables constant, score would decrease 2.2 points compared to a student with no additional sport (since they dont need it)
-# In addition internet got a 1.037 so holding the other variable constants, with internet access seems to be an association
-    # with gaining at least 1 point for the final math score  
-# Surprised that the school support was the most negative and that internet was the most positive for my model
+# FINAL COMMENTS SUMMARY
+# After filtering the data, the dataset contained 357 students, compared with
+# the original dataset of 395 students.
+#
+# The full-feature model was the best performer compared to just the "failures" model. 
+# Its RMSE was2.66, meaning that its predicted final math scores were off by about 2.66
+# points on average. The R² score was 0.26, meaning the model explained about
+# 26% of the variation in students' final math scores.
+#
+# The largest negative coefficient was schoolsup (-2.263). Holding the other
+# features constant, students who received additional school support
+# were predicted to score about 2.26 points lower than students without it.
+# This shows an association, not that school support causes lower grades;
+# students receiving support may have already been struggling academically.
+#
+# The largest positive coefficient was internet (1.037). Holding the other
+# included features constant, students with internet access at home were
+# predicted to score about 1.04 points higher than students without internet
+# access. This is also an association rather than proof of causation.
+#
+# A surprising result was these two features, I wouldn't have guessed that school support would have the strongest
+# negative relationship while internet the strongest positive relationship for the models.
 
 print("=" * 60)
 
