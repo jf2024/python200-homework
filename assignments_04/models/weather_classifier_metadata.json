@@ -1,0 +1,28 @@
+{
+  "python_version": "3.12.8 (v3.12.8:2dc476bcb91, Dec  3 2024, 14:43:19) [Clang 13.0.0 (clang-1300.0.29.30)]",
+  "sklearn_version": "1.9.0",
+  "features": [
+    "temperature_2m_max",
+    "temperature_2m_min",
+    "precipitation_sum",
+    "wind_speed_10m_max"
+  ],
+  "label": "good_for_running",
+  "best_params": {
+    "clf__C": 100.0
+  },
+  "test_auc": 0.888,
+  "trained_on": "2023 Open-Meteo, Palmdale CA (lat 34.579449, lon -118.109291)",
+  "label_definition": {
+    "description": "Good conditions for running based on temperature, precipitation, and wind.",
+    "rules": {
+      "temperature_2m_max": ">= 7\u00b0C and <= 30\u00b0C",
+      "temperature_2m_min": ">= 0\u00b0C",
+      "precipitation_sum": "< 3.0 mm",
+      "wind_speed_10m_max": "< 30 km/h"
+    },
+    "logic": "All conditions must be true",
+    "positive_label": 1,
+    "negative_label": 0
+  }
+}
