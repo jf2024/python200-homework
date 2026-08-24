@@ -90,14 +90,18 @@ def rewrite_bullets(bullets: list[str]) -> list[dict]:
     """
 
     messages = [{"role": "user", "content": prompt}]
-
     response = get_completion(messages)
 
-    result = json.loads(response)
+    try:
+        result = json.loads(response)
+    except json.JSONDecodeError:
+        print("Error: Model response was not valid JSON.")
+        print("Raw response:", response)
+        return []
 
     for item in result:
-        print(f"Original:  {item['original']}")
-        print(f"Improved:  {item['improved']}")
+        print(f"Original: {item['original']}")
+        print(f"Improved: {item['improved']}")
         print("-" * 50)
 
     return result
@@ -248,7 +252,15 @@ def run_chatbot():
 
             if raw_bullets:
                 print("\nJob Application Helper: Here are your improved bullets:\n")
-                rewrite_bullets(raw_bullets)
+                rewritten = rewrite_bullets(raw_bullets)
+                messages.append({
+                    "role": "user",
+                    "content": f"Rewrite these resume bullets: {raw_bullets}"
+                    })
+                messages.append({
+                    "role": "assistant",
+                    "content": json.dumps(rewritten)
+                })
             else:
                 print("Job Application Helper: No bullet points were provided.")
 
@@ -265,6 +277,18 @@ def run_chatbot():
                 "\nPlease review and edit the draft carefully before "
                 "submitting it anywhere."
             )
+            messages.append({
+                "role": "user",
+                "content": (
+                    f"Generate a cover letter opening for the job title "
+                    f"{job_title}. Background: {background}"
+                )
+            })
+
+            messages.append({
+                "role": "assistant",
+                "content": opening
+            })
 
         # 7. Otherwise, handle it as a regular chat turn
         else:

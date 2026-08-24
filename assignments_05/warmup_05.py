@@ -124,15 +124,14 @@ for i, r in enumerate(reviews, start=1):
 
 ## Q2
 for i, r in enumerate(reviews, start=1):
-    prompt = """
-    f"What is the sentiment of this review: {r}?"
+    prompt = f"""
+    "What is the sentiment of this review: {r}?"
 
     Example:
     Review: "Fast shipping but the item arrived damaged."
     Sentiment: mixed
 
     """
-    prompt = f"What is the sentiment of this review: {r}?"
     response = get_completion(prompt, temperature=0)
     print("Review (with 1 example)", i, response)
 # With the one example, the format became more one worded labels instead of full on explanations for the answer
@@ -140,8 +139,8 @@ for i, r in enumerate(reviews, start=1):
 
 ## Q3
 for i, r in enumerate(reviews, start=1):
-    prompt = """
-    f"What is the sentiment of this review: {r}?"
+    prompt = f"""
+    "What is the sentiment of this review: {r}?"
 
     Examples:
     Review: "Fast shipping but the item arrived damaged."
@@ -153,7 +152,6 @@ for i, r in enumerate(reviews, start=1):
     Review: "Slow shipping, had to call customer service and needed to return due to damage"
     Sentiment: negative
     """
-    prompt = f"What is the sentiment of this review: {r}?"
     response = get_completion(prompt, temperature=0)
     print("Review (with multiple examples)", i, response)
 # We would use zero-shot if it was for a basic task and just wanting to see something quickly 
@@ -184,15 +182,16 @@ but the UI is clunky and the export options are limited."
 """
 
 response = get_completion(prompt, temperature=0)
-print("Raw response:", response)
 
 # Parse JSON safely - got this from the prompt engineering notebook 
 try:
     result = json.loads(response)
     print("Parsed sentiment:", result["sentiment"])
     print("Confidence:", result["confidence"])
+    print("Reason:", result["reason"])
 except json.JSONDecodeError:
     print("Error: response was not valid JSON")
+    print("Raw response:", response)
 
 ## Q6
 user_text = "First boil a pot of water. Once boiling, add a handful of salt and the \
@@ -210,11 +209,13 @@ print(response)
 
 second_prompt = """
 You will be given text inside triple backticks.
+
 If it contains step-by-step instructions, rewrite them as a numbered list.
+
 If it does not contain instructions, respond with exactly: "No steps provided."
 
-My name is Messi. I am the best footballer player of all time and I am happy playing for 
-Inter Miami. Hopefully I can return to Barcelona one day.
+```My name is Messi. I am the best footballer player of all time and I am happy playing for
+Inter Miami. Hopefully I can return to Barcelona one day.```
 """
 response = get_completion(second_prompt, temperature=0)
 print(response)
