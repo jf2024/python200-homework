@@ -155,9 +155,10 @@ for q in questions:
     print(f"\nQ: {q}")
     response = query_engine.query(q)
     print("A:", response)
-    
-    for node_with_score in response.source_nodes:
-        #print(f"Node ID: {node_with_score.node.node_id}")
+    print("\nTop 3 Retrieved Source Nodes:")
+    for i, node_with_score in enumerate(response.source_nodes[:3], start=1): #didnt understand the feedback so i got chat to help me with this
+        print(f"\nSource Node {i}:")
+        print(f"Document: {node_with_score.node.metadata.get('file_name', 'Unknown')}")
         print(f"Similarity Score: {node_with_score.score:.4f}")
         print(f"Text Snippet: {node_with_score.node.get_content()[:150]}...")
         print("-" * 30)
@@ -257,26 +258,29 @@ print("Faithfulness Score:", faithfulness_result2.score)
 print("Relevancy Score:", relevancy_result2.score)
 
 
-# Analysis:
-# A faithfulness score of 1.0 means the answer is fully supported by the
-    # retrieved source context. A score of 0.0 indicates that the answer is not
-    # supported by the retrieved context and may contain false/made up info.
-# A relevancy score measures how well the response answers the user's question.
-    # Does the answer actually address the question? 
+# Analysis: #rewrote my analysis using chat
+# The faithfulness evaluator checks whether the response is supported by the
+    # retrieved context, while the relevancy evaluator checks whether the response
+    # appropriately addresses the user's question.
 
-# I think the scores should be higher for the employee-benefits question because
-    # that information is clearly present in the BrightLeaf documents. The scores
-    # may be lower for the sports-team question because that information is not in
-    # the documents and is unrelated to the docuemnts.
+# For the employee-benefits question, I expected both scores to be high because
+    # the BrightLeaf documents contain information about employee benefits and the
+    # response should be grounded in that information.
 
-# The first query scored 1.0 for both faithfulness and relevancy because the
-    # answer was supported by the documents and directly answered the question.
-# The second scored 0.0 for faithfulness because the documents had no answer,
-    # but 1.0 for relevancy because the model correctly said the information was unavailable.
-    # This makes since that information isn't in the documents and it cannot answer. 
+# For the sports-team question, the information is not contained in the
+    # BrightLeaf documents. I therefore expected the faithfulness score to be low
+    # if the model generated unsupported information. The relevancy score depends
+    # on how the evaluator judges the response itself. If the model correctly says
+    # that the information is unavailable, the response may still be considered
+    # relevant because it directly addresses the question rather than making up an
+    # answer.
 
-# LLM-as-a-judge means using another language model to evaluate the quality of
-    # an LLM's response against the question and retrieved context. It's useful since there are
-    # many open-ended responees, not just one way to answer somethnig correctly so using 
-    # LLM as a judge is a good way to measure instead of a classical accuacy metric which is more strict.
-    
+# This shows why both metrics are useful. Faithfulness tells us whether the
+    # answer is supported by the retrieved context, while relevancy tells us
+    # whether the response actually addresses the user's question. An answer can
+    # be relevant without being factually supported by the documents.
+
+# LLM-as-a-judge uses another language model to evaluate an LLM response
+    # against the question and retrieved context. This is useful because many
+    # questions have multiple reasonable ways to answer them, making a strict
+    # traditional accuracy metric difficult to use.
